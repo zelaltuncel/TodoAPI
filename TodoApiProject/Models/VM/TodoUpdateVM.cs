@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace TodoApiProject.Models.VM
 {
-    public class TodoListVM
+    public class TodoUpdateVM
     {
         public int id { get; set; }
 
         public string name { get; set; }
-        public DateTime addDate { get; set; }
 
-        public DateTime? updateDate { get; set; } 
+        public DateTime? updateDate { get; set; } = DateTime.Now;
     }
 }

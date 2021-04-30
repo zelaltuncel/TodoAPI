@@ -36,7 +36,7 @@ namespace TodoApiProject.Controllers
         }
 
 
-   
+        //[Route("Todo")
         [HttpPost]
         public IActionResult AddTodo([FromForm] TodoAddVM todoAdd) 
         {
@@ -59,7 +59,7 @@ namespace TodoApiProject.Controllers
         }
 
 
-        [Route("Todo/Delete")]
+        //[Route("Todo/Delete")]
         [HttpPost]
         public IActionResult Delete([FromForm] TodoDeleteVM todoDelete)
         {
@@ -75,6 +75,69 @@ namespace TodoApiProject.Controllers
             else 
             { 
                 return BadRequest("There is no any to do has that id!");
+            }
+
+        }
+
+        //[Route("Category/update")]
+        //[HttpPost]
+        //public IActionResult Update([FromForm] TodoUpdateVM categoryvm)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Category category = _eCommerceContext.Categories.FirstOrDefault(q => q.ID == categoryvm.id);
+
+        //        if (category != null)
+        //        {
+        //            category.Name = categoryvm.name;
+        //            category.Description = categoryvm.description;
+
+        //            _eCommerceContext.SaveChanges();
+
+
+        //            return Ok(categoryvm);
+        //        }
+        //        else
+        //        {
+        //            return BadRequest("Böyle bir kategori sistemde mevcut değil");
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(ModelState.Values);
+        //    }
+
+        //}
+
+        [HttpPost]
+        public IActionResult Update([FromForm] TodoUpdateVM todoUpdate)
+        {
+            if (ModelState.IsValid)
+            {
+                Work todo = _todoContext.Works.FirstOrDefault(q => q.ID == todoUpdate.id);
+
+                if (todo != null)
+                {
+                    todo.Name = todoUpdate.name;
+                    todo.UpdateDate = todoUpdate.updateDate;
+                 
+       
+
+                    _todoContext.SaveChanges();
+
+
+                    return Ok(todoUpdate);
+                }
+                else
+                {
+                    return BadRequest("Böyle bir kategori sistemde mevcut değil");
+                }
+
+            }
+            else
+            {
+                return BadRequest(ModelState.Values);
             }
 
         }

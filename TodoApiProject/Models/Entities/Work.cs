@@ -26,7 +26,7 @@ namespace TodoApiProject.Models.Entities
     
         public DateTime AddDate { get; set; } = DateTime.Now;
 
-        public DateTime? UpdateDate { get; set; } = DateTime.Now;
+        public DateTime? UpdateDate { get; set; } 
 
 
 

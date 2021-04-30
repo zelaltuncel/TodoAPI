@@ -9,25 +9,85 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
             integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" />
+
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+
 </head>
 <body>
-    <div class="col-md-4">
-        <button id="Getir">Getir</button>
+
+
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>To Do</th>
+                <th>Add Date</th>
+                <th>Update Date</th>
+                <th>Process</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+
+    </table>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Update </h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="ID">ID</label>
+                            <input type="text" class="form-control" id="ID" placeholder="Id" disabled="disabled" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input type="text" class="form-control" id="Name" placeholder="Name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="AddDate">Add Date</label>
+                            <input type="text" class="form-control" id="Age" placeholder="Age" />
+                        </div>
+                        <div class="form-group">
+                            <label for="UpdateDate">Update Date</label>
+                            <input type="text" class="form-control" id="State" placeholder="State" />
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    @*<button type="button" class="btn btn-primary" id="btnAdd" onclick="return Add();">Add</button>*@
+                    <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="Update();">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <table class="table">
-            <thead class="thead-dark">
-            <th>Id</th>
-            <th>Name</th>
-            <th id="title">Add date</th>
-            <th>Update</th>
-            </thead>
-            <tbody>
-            </tbody>
+    @*<div>
+            <table class="table">
+                <thead class="thead-dark">
+                <th>Id</th>
+                <th>Name</th>
+                <th id="title">Add date</th>
+                <th>Update</th>
+                </thead>
+                <tbody>
+                </tbody>
 
-        </table>
-    </div>
+            </table>
+        </div>*@
 </body>
 </html>
 
@@ -35,35 +95,93 @@
 
 
 
-    $("#Getir").click(function () {
 
 
-        $(document).ready(function () {
-    
-            $.ajax({
-                url: "https://localhost:44323/api/Todo/GetTodos",
-                type: "GET",
-                crossDomain: true,
-                dataType: "json",
-                success: function (data) {
-                    $("tbody").html("");
-                    $.each(data, function (key, item) {
-                        $("tbody").append(`
-            <tr>
+    $(document).ready(function () {
+        $("#example").DataTable({
+            "responsive": false, "lengthChange": true, "autoWidth": true,
+        })
+
+
+        $.ajax({
+            url: "https://localhost:44323/api/Todo/GetTodos",
+            type: "GET",
+            crossDomain: true,
+            dataType: "json",
+            success: function (data) {
+                $("tbody").html("");
+                $.each(data, function (key, item) {
+                    $("tbody").append(`
+            <tr id="`+ item.id +`">
                 <td>`+ item.id + `</td>
                 <td>`+ item.name + `</td>
                 <td>`+ item.addDate + `</td>
                 <td>`+ item.updateDate + `</td>
+                <td>
+    <button id="`+ item.id +`" class="btn btn-danger delete" type="submit">Delete</button>
+  <button id="`+ item.id +`" class="btn btn-danger edit" type="submit">Edit</button>
+                </td>
 
 
             </tr>
             `)
-                    });
-                },
-                error: function (xhr, status, error) {
-                    alert("Hata : " + error);
-                }
-            });
+                });
+            },
+            error: function (xhr, status, error) {
+                alert("Hata : " + error);
+            }
         });
+
+
+        $(document).on("click", ".delete", function () {
+            let id = $(this).attr("id");
+            $.ajax({
+                url: "/api/Todo/Delete/",
+                type: "POST",
+                data: { id: id },
+                success: function (msg) {
+                    $("#" + id).fadeOut();
+                    
+                   
+                    alert("Deleted");
+                },
+                error: function (err) {
+                    alert("Failed")
+                }
+            })
+        });
+
+
+        var obj = {
+            ID: $('#ID').val(),
+            Name: $('#Name').val(),
+          
+        };
+        $.ajax({
+            url: "/api/Todo/Update",
+            data: JSON.stringify(obj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                loadData();
+                $('#myModal').modal('hide');
+                $('#ID').val("");
+                $('#Name').val("");
+              
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });  
+
     });
+
+
+
+
+
+
+
+
 </script>
