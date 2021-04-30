@@ -11,7 +11,9 @@
 
 </head>
 <body>
-
+    <div class="col-md-4">
+        <button id="Getir">Getir</button>
+    </div>
 
     <div>
         <table class="table">
@@ -33,18 +35,20 @@
 
 
 
+    $("#Getir").click(function () {
 
 
-    $(document).ready(function () {
-        $("tbody").html("");
-        $.ajax({
-            url: "https://localhost:44323/Todo",
-            type: "GET",
-            crossDomain: true,
-            dataType: "json",
-            success: function (data) {
-                $.each(data, function (key, item) {
-                    $("tbody").append(`
+        $(document).ready(function () {
+    
+            $.ajax({
+                url: "https://localhost:44323/api/Todo/GetTodos",
+                type: "GET",
+                crossDomain: true,
+                dataType: "json",
+                success: function (data) {
+                    $("tbody").html("");
+                    $.each(data, function (key, item) {
+                        $("tbody").append(`
             <tr>
                 <td>`+ item.id + `</td>
                 <td>`+ item.name + `</td>
@@ -54,11 +58,12 @@
 
             </tr>
             `)
-                });
-            },
-            error: function (xhr, status, error) {
-                alert("Hata : " + error);
-            }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert("Hata : " + error);
+                }
+            });
         });
     });
 </script>

@@ -8,6 +8,7 @@ namespace TodoApiProject.Controllers
 {
     public class HomeController : Controller
     {
+        [Route("[controller]/[action]")]
         public IActionResult Index()
         {
             return View();

@@ -36,13 +36,14 @@
 
 
     $(document).ready(function () {
-        $("tbody").html("");
+       
         $.ajax({
-            url: "/Todo/GetTodos",
+            url: "http://localhost:44323/api/Todo/GetTodos",
             type: "GET",
             crossDomain: true,
             dataType: "json",
             success: function (data) {
+                $("tbody").html("");
                 $.each(data, function (key, item) {
                     $("tbody").append(`
             <tr>

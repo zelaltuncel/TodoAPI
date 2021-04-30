@@ -9,6 +9,7 @@ using TodoApiProject.Models.VM;
 
 namespace TodoApiProject.Controllers
 {
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TodoController : ControllerBase
     {
@@ -18,11 +19,11 @@ namespace TodoApiProject.Controllers
             _todoContext = todoContext;
         }
 
-       
 
-        [Route("Todo")]
+
+      
         [HttpGet]
-        public List<TodoListVM> GetTodos()
+        public IActionResult GetTodos()
         {
             List<TodoListVM> todos = _todoContext.Works.Where(q => q.IsDeleted == false).Select(q => new TodoListVM()
             {
@@ -31,11 +32,11 @@ namespace TodoApiProject.Controllers
                 addDate = q.AddDate,
                 updateDate = q.UpdateDate
             }).ToList();
-            return todos;
+            return Ok(todos);
         }
 
 
-        [Route("Todo")]
+   
         [HttpPost]
         public IActionResult AddTodo([FromForm] TodoAddVM todoAdd) 
         {
