@@ -36,21 +36,21 @@ namespace TodoApiProject.Controllers
         }
 
 
-        //[Route("Todo")
+   
         [HttpPost]
-        public IActionResult AddTodo([FromForm] TodoAddVM todoAdd) 
+        public IActionResult AddTodo([FromBody] TodoAddVM obj) 
         {
             if (ModelState.IsValid)
             {
                 Work todo = new Work();
-                todo.Name = todoAdd.name;
+                todo.Name = obj.name;
 
                 _todoContext.Works.Add(todo);
                 _todoContext.SaveChanges();
 
-                todoAdd.id = todo.ID;
+                obj.id = todo.ID;
 
-                return Ok(todoAdd);
+                return Ok(obj);
             }
             else
             {
@@ -59,7 +59,7 @@ namespace TodoApiProject.Controllers
         }
 
 
-        //[Route("Todo/Delete")]
+       
         [HttpPost]
         public IActionResult Delete([FromForm] TodoDeleteVM todoDelete)
         {
@@ -70,68 +70,38 @@ namespace TodoApiProject.Controllers
                 todo.IsDeleted = true;
                 _todoContext.SaveChanges();
 
-                return Ok(todo);
+                return Ok("Person added successfully!");
             }
             else 
             { 
-                return BadRequest("There is no any to do has that id!");
+                return BadRequest("There is no any todo has that id!");
             }
 
         }
 
-        //[Route("Category/update")]
-        //[HttpPost]
-        //public IActionResult Update([FromForm] TodoUpdateVM categoryvm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Category category = _eCommerceContext.Categories.FirstOrDefault(q => q.ID == categoryvm.id);
-
-        //        if (category != null)
-        //        {
-        //            category.Name = categoryvm.name;
-        //            category.Description = categoryvm.description;
-
-        //            _eCommerceContext.SaveChanges();
-
-
-        //            return Ok(categoryvm);
-        //        }
-        //        else
-        //        {
-        //            return BadRequest("Böyle bir kategori sistemde mevcut değil");
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(ModelState.Values);
-        //    }
-
-        //}
-
+        
         [HttpPost]
-        public IActionResult Update([FromForm] TodoUpdateVM todoUpdate)
+        public IActionResult Update([FromBody] TodoUpdateVM obj)
         {
             if (ModelState.IsValid)
             {
-                Work todo = _todoContext.Works.FirstOrDefault(q => q.ID == todoUpdate.id);
+                Work todo = _todoContext.Works.FirstOrDefault(q => q.ID == obj.id);
 
                 if (todo != null)
                 {
-                    todo.Name = todoUpdate.name;
-                    todo.UpdateDate = todoUpdate.updateDate;
+                    todo.ID = obj.id;
+                    todo.Name = obj.name;
+                    todo.UpdateDate = obj.updateDate;
                  
-       
 
                     _todoContext.SaveChanges();
 
 
-                    return Ok(todoUpdate);
+                    return Ok(obj);
                 }
                 else
                 {
-                    return BadRequest("Böyle bir kategori sistemde mevcut değil");
+                    return BadRequest("There is no any todo has that id!");
                 }
 
             }
