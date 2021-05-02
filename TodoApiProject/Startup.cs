@@ -55,7 +55,7 @@ namespace TodoApiProject
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseStaticFiles();
             app.UseAuthorization();
             app.UseCors(MyAllowSpecificOrigins);
 

@@ -10,8 +10,8 @@ namespace TodoApiProject.Models.VM
         public int id { get; set; }
 
         public string name { get; set; }
-        public DateTime addDate { get; set; }
+        public string addDate { get; set; }
 
-        public DateTime? updateDate { get; set; } 
+        public string updateDate { get; set; } 
     }
 }

@@ -24,9 +24,9 @@ namespace TodoApiProject.Models.Entities
             }
         }
     
-        public DateTime AddDate { get; set; } = DateTime.Now;
+        public string AddDate { get; set; } = DateTime.Now.ToShortDateString();
 
-        public DateTime? UpdateDate { get; set; } 
+        public string UpdateDate { get; set; } 
 
 
 

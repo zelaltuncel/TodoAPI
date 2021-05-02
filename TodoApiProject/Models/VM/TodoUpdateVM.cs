@@ -11,6 +11,6 @@ namespace TodoApiProject.Models.VM
 
         public string name { get; set; }
 
-        public DateTime? updateDate { get; set; } = DateTime.Now;
+        public string updateDate { get; set; } = DateTime.Now.ToShortDateString();
     }
 }
